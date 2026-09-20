@@ -1,0 +1,2 @@
+# Install the exact research dependencies declared in pyproject.toml.
+-e .[dev]

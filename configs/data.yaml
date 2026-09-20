@@ -1,0 +1,21 @@
+project_root: ..
+seed: 42
+deterministic: true
+data:
+  image_root: data/dummy
+  source_csv: data/dummy/metadata.csv
+  validation_csv: null
+  test_csv: null
+  group_column: writer_id
+  validation_fraction: 0.2
+  split_dir: artifacts/splits
+crop:
+  enabled: true
+  threshold: 235
+  padding: 8
+  debug_dir: null
+normalization:
+  unicode_form: null
+  lowercase: false
+  collapse_whitespace: false
+  strip: false
