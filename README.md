@@ -1,7 +1,9 @@
 # Historical Handwriting Recognition with Qwen2.5-VL
 
-Fine-tune Qwen2.5-VL-3B for handwritten line recognition with LoRA,
-StackMix-style augmentation and minimum word error rate (MWER) training.
+An architecture prototype for handwritten line recognition with Qwen2.5-VL-3B.
+The code implements LoRA fine-tuning, StackMix-style augmentation and minimum
+word error rate (MWER) training. Full-model experiments and recognition results
+are not included.
 
 ## Model architecture
 
@@ -23,6 +25,13 @@ flowchart TD
 ```
 
 **SFT:** update LoRA + visual merger. **MWER:** update LoRA only; merger frozen.
+
+| Component | Implementation |
+| --- | --- |
+| Qwen image/text processing and LoRA | [models/](src/htr/models/) |
+| CTC alignment and StackMix | [data/stackmix/](src/htr/data/stackmix/) |
+| SFT and MWER objectives | [training/](src/htr/training/) |
+| Greedy/beam decoding and N-best rescoring | [decoding/](src/htr/decoding/) |
 
 ## Setup
 
@@ -61,8 +70,8 @@ See the [training guide](docs/guide.md) for StackMix, MWER, beam search and abla
 python -m pytest -q
 ```
 
-Tests use a small random model on CPU. Full pretrained 3B/CUDA training and
-recognition accuracy have not yet been validated.
+Tests exercise the implementation with a small random model on CPU.
+Pretrained 3B/CUDA training and recognition accuracy remain unverified.
 
 ## License
 
