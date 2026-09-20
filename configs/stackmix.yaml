@@ -6,7 +6,7 @@ stackmix:
   ctc_epochs: 30
   ctc_learning_rate: 0.001
   bank_dir: artifacts/stackmix
-  synthetic_dir: data/dummy/synthetic
+  synthetic_dir: data/private/synthetic
   height: 48
   min_quality: 0.5
   max_alignment_cer: 0.25

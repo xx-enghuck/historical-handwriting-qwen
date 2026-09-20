@@ -10,8 +10,8 @@ import yaml
 
 @dataclass
 class DataConfig:
-    image_root: str = "data/dummy"
-    source_csv: str = "data/dummy/metadata.csv"
+    image_root: str = "data/private"
+    source_csv: str = "data/private/train.csv"
     validation_csv: str | None = None
     test_csv: str | None = None
     group_column: str | None = "writer_id"
@@ -101,7 +101,7 @@ class StackMixConfig:
     enabled: bool = False
     synthetic_ratio: float = 1.0
     bank_dir: str = "artifacts/stackmix"
-    synthetic_dir: str = "data/dummy/synthetic"
+    synthetic_dir: str = "data/private/synthetic"
     ctc_checkpoint: str = "artifacts/ctc/model.pt"
     ctc_epochs: int = 30
     ctc_learning_rate: float = 0.001

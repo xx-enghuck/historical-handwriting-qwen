@@ -2,8 +2,8 @@ project_root: ..
 seed: 42
 deterministic: true
 data:
-  image_root: data/dummy
-  source_csv: data/dummy/metadata.csv
+  image_root: data/private
+  source_csv: data/private/train.csv
   validation_csv: null
   test_csv: null
   group_column: writer_id

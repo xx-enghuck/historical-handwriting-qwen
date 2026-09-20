@@ -11,10 +11,6 @@ from htr.utils.logging import setup_logging
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Handwriting recognition with Qwen2.5-VL")
     subparsers = parser.add_subparsers(dest="command", required=True)
-    dummy = subparsers.add_parser("dummy", help="Generate original printed dummy images")
-    dummy.add_argument("--output", type=Path, required=True)
-    dummy.add_argument("--count", type=int, default=20)
-    dummy.add_argument("--seed", type=int, default=42)
     for command in (
         "prepare-data",
         "train-sft",
@@ -50,11 +46,6 @@ def main(argv: list[str] | None = None) -> None:
     agg.add_argument("--allow-mixed", action="store_true")
     args = parser.parse_args(argv)
     setup_logging()
-    if args.command == "dummy":
-        from htr.data.dummy import generate_dummy
-
-        generate_dummy(args.output.resolve(), args.count, args.seed)
-        return
     if args.command == "aggregate":
         from htr.experiments.aggregate import aggregate
 

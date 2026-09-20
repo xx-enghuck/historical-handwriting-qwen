@@ -32,9 +32,6 @@ Overlapping IDs, paths, image hashes and groups are rejected. Use a new
 htr prepare-data --config configs/data.yaml
 ```
 
-For a local fixture with the default config, run
-`htr dummy --output data/dummy --count 20 --seed 42` first.
-
 ## Supervised fine-tuning
 
 SFT trains the language model's LoRA adapters and visual merger. The vision
