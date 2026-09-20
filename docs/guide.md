@@ -153,9 +153,7 @@ ruff format --check src tests
 
 Tests cover splits, metrics, masking, LoRA gradients, CTC alignment, checkpoint
 resume and the full SFT → StackMix → MWER → evaluation pipeline. They run on CPU
-without downloading weights. The recorded local environment is in
-[requirements-tested-macos-arm64.txt](../requirements-tested-macos-arm64.txt);
-it is a macOS snapshot, not a CUDA lockfile.
+without downloading weights.
 
 The implementation uses a single device. Distributed training, quantization,
 full-page layout analysis and online N-best refresh are not implemented.
