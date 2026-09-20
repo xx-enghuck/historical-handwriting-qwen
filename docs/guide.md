@@ -143,17 +143,7 @@ only. SFT uses `train.epochs` and `train.learning_rate`; MWER uses
 `mwer.ablation_epochs` and `mwer.ablation_learning_rate`. Fresh experiments need
 fresh output paths. StackMix increases training updates when epochs are held fixed.
 
-## Development
-
-```bash
-python -m pytest -q
-ruff check src tests
-ruff format --check src tests
-```
-
-Tests cover splits, metrics, masking, LoRA gradients, CTC alignment, checkpoint
-resume and the full SFT → StackMix → MWER → evaluation pipeline. They run on CPU
-without downloading weights.
+## Scope
 
 The implementation uses a single device. Distributed training, quantization,
 full-page layout analysis and online N-best refresh are not implemented.

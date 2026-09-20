@@ -2,8 +2,8 @@
 
 An architecture prototype for handwritten line recognition with Qwen2.5-VL-3B.
 The code implements LoRA fine-tuning, StackMix-style augmentation and minimum
-word error rate (MWER) training. Full-model experiments and recognition results
-are not included.
+word error rate (MWER) training. Pretrained 3B/CUDA training and recognition
+accuracy remain unverified.
 
 ## Model architecture
 
@@ -63,15 +63,6 @@ htr evaluate --config configs/inference.yaml
 
 Checkpoints go to `runs/`; predictions and CER/WER metrics go to `outputs/`.
 See the [training guide](docs/guide.md) for StackMix, MWER, beam search and ablations.
-
-## Tests
-
-```bash
-python -m pytest -q
-```
-
-Tests exercise the implementation with a small random model on CPU.
-Pretrained 3B/CUDA training and recognition accuracy remain unverified.
 
 ## License
 

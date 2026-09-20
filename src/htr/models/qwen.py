@@ -17,9 +17,7 @@ def resolve_device(name: str) -> torch.device:
         name = "cuda" if torch.cuda.is_available() else "cpu"
     device = torch.device(name)
     if device.type == "mps":
-        raise ValueError(
-            "Use CPU smoke tests or CUDA training; MPS is not validated for this pipeline"
-        )
+        raise ValueError("MPS is not supported; use CPU or CUDA")
     return device
 
 
