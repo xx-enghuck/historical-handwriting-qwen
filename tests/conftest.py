@@ -1,9 +1,6 @@
-"""Tiny, randomly initialized REAL Qwen model/processor for offline software smoke tests.
+"""Small random Qwen model and processor for CPU tests."""
 
-This is never selected implicitly by training or inference commands and produces
-no meaningful recognition accuracy. No pretrained weights are downloaded.
-"""
-
+import pytest
 from tokenizers import Tokenizer, decoders, models, pre_tokenizers
 from transformers import (
     PreTrainedTokenizerFast,
@@ -15,6 +12,7 @@ from transformers import (
 )
 
 
+@pytest.fixture
 def tiny_components():
     specials = [
         "<|endoftext|>",

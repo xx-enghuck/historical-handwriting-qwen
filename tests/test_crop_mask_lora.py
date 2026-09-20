@@ -1,49 +1,11 @@
 import pytest
 import torch
 from PIL import Image, ImageDraw
-from transformers import Qwen2_5_VLConfig, Qwen2_5_VLForConditionalGeneration
 
 from htr.config import CropConfig, LoraConfig
 from htr.data.crop import crop_line
 from htr.models.lora import add_lora, inspect_layout, set_trainable
 from htr.models.qwen import response_labels
-
-
-def tiny_qwen():
-    config = Qwen2_5_VLConfig(
-        text_config={
-            "vocab_size": 64,
-            "hidden_size": 32,
-            "intermediate_size": 64,
-            "num_hidden_layers": 1,
-            "num_attention_heads": 4,
-            "num_key_value_heads": 2,
-            "pad_token_id": 0,
-            "eos_token_id": 2,
-            "rope_parameters": {
-                "rope_type": "default",
-                "mrope_section": [1, 1, 2],
-                "rope_theta": 10000,
-            },
-        },
-        vision_config={
-            "depth": 1,
-            "hidden_size": 32,
-            "intermediate_size": 64,
-            "num_heads": 4,
-            "out_hidden_size": 32,
-            "patch_size": 2,
-            "spatial_merge_size": 2,
-            "temporal_patch_size": 2,
-            "window_size": 8,
-            "fullatt_block_indexes": [0],
-        },
-        image_token_id=3,
-        video_token_id=4,
-        vision_start_token_id=5,
-        vision_end_token_id=6,
-    )
-    return Qwen2_5_VLForConditionalGeneration(config)
 
 
 def test_crop(tmp_path):
@@ -67,8 +29,8 @@ def test_response_mask():
     assert labels.tolist() == [[-100, -100, -100, -100, 11, 0], [-100, -100, -100, 12, 13, 0]]
 
 
-def test_real_qwen_lora_freeze_policy():
-    model = tiny_qwen()
+def test_lora_freeze_policy(tiny_components):
+    model, _ = tiny_components
     layout = inspect_layout(model, LoraConfig())
     assert len(layout.targets) == 7
     with pytest.raises(ValueError, match="Missing"):

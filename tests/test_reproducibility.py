@@ -9,14 +9,13 @@ from htr.data.dummy import generate_dummy
 from htr.data.split import prepare_splits
 from htr.experiments.ablation import run_ablations
 from htr.experiments.aggregate import aggregate
-from htr.testing import tiny_components
 from htr.training.engine import train
 from htr.utils.io import write_json
 
 
-def test_epoch_resume_matches_uninterrupted_with_dropout(tmp_path):
+def test_epoch_resume_matches_uninterrupted_with_dropout(tmp_path, tiny_components):
     torch.set_num_threads(1)
-    model, processor = tiny_components()
+    model, processor = tiny_components
     base = tmp_path / "base"
     model.save_pretrained(base)
     processor.save_pretrained(base)
@@ -65,7 +64,6 @@ def test_ablation_plan_and_aggregation_guard(tmp_path):
     assert plan["training_stages"] == ["stackmix_sft", "mwer"]
     assert plan["experiments"]["E3"]["checkpoint_stage"] == "stackmix_sft"
     paths = []
-    # Hand-specified unit-test data; not exported as reported research results.
     for i in range(2):
         path = tmp_path / f"test{i}.json"
         write_json(

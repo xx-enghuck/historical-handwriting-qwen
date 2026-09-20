@@ -36,7 +36,7 @@ def test_train_only_bank_synthesis(tmp_path):
     cfg.stackmix.enabled = True
     cfg.stackmix.synthetic_dir = "dummy/synthetic"
     cfg.stackmix.ctc_epochs = 1
-    # Explicitly weak settings test software flow, never research-quality boundaries.
+    # Relax alignment thresholds for the one-epoch fixture.
     cfg.stackmix.min_quality = 0
     cfg.stackmix.max_alignment_cer = 10
     cfg.stackmix.min_words = cfg.stackmix.max_words = 2

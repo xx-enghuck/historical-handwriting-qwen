@@ -6,13 +6,12 @@ from htr.data.dummy import generate_dummy
 from htr.data.split import prepare_splits
 from htr.models.lora import add_lora, merger_module
 from htr.models.qwen import QwenEncoder
-from htr.testing import tiny_components
 from htr.training.engine import train
 
 
-def test_image_sft_checkpoint_resume(tmp_path):
+def test_image_sft_checkpoint_resume(tmp_path, tiny_components):
     torch.set_num_threads(1)
-    model, processor = tiny_components()
+    model, processor = tiny_components
     base = tmp_path / "tiny_base"
     model.save_pretrained(base)
     processor.save_pretrained(base)
@@ -44,8 +43,8 @@ def test_image_sft_checkpoint_resume(tmp_path):
     assert len((tmp_path / "runs/sft/history.jsonl").read_text().splitlines()) == 2
 
 
-def test_multimodal_mask_and_merger_gradient():
-    model, processor = tiny_components()
+def test_multimodal_mask_and_merger_gradient(tiny_components):
+    model, processor = tiny_components
     model = add_lora(model, LoraConfig(r=2))
     encoder = QwenEncoder(processor, ModelConfig(prompt="Transcribe."))
     images = [Image.new("RGB", (32, 16), "white"), Image.new("RGB", (24, 16), "gray")]

@@ -1,4 +1,4 @@
-"""Thin command-line dispatch; research logic lives in importable modules."""
+"""Commands for data preparation, training and evaluation."""
 
 import argparse
 import logging
@@ -9,7 +9,7 @@ from htr.utils.logging import setup_logging
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(description="Historical handwriting Qwen research pipeline")
+    parser = argparse.ArgumentParser(description="Handwriting recognition with Qwen2.5-VL")
     subparsers = parser.add_subparsers(dest="command", required=True)
     dummy = subparsers.add_parser("dummy", help="Generate original printed dummy images")
     dummy.add_argument("--output", type=Path, required=True)

@@ -1,13 +1,19 @@
 """Deterministic model-score-only search; no references or risk arguments."""
 
 import time
-from dataclasses import asdict
+from dataclasses import asdict, replace
 
 import torch
 from PIL import Image
 
 from htr.config import DecodeConfig
 from htr.models.qwen import QwenEncoder, to_device
+
+
+def greedy_decode(model, encoder, image, cfg: DecodeConfig) -> dict:
+    return generate_candidates(
+        model, encoder, image, replace(cfg, num_beams=1, num_return_sequences=1)
+    )
 
 
 def synchronize(model) -> None:

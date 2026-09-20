@@ -1,6 +1,13 @@
-"""N-best minimum expected WER with detached risks and mean-risk centering."""
+"""Supervised transcription and minimum word error rate losses."""
 
 import torch
+
+from htr.models.qwen import QwenEncoder, to_device
+
+
+def sft_loss(model, encoder: QwenEncoder, images: list, texts: list):
+    batch = to_device(encoder.batch(images, texts=texts), model)
+    return model(**batch, use_cache=False).loss
 
 
 def nbest_probabilities(sequence_scores: torch.Tensor) -> torch.Tensor:

@@ -9,8 +9,7 @@ from htr.data.dataset import samples_hash
 from htr.decoding.rescore import rescore_candidates
 from htr.evaluation.metrics import sample_metrics
 from htr.training.checkpoint import bundle_hash
-from htr.training.losses import mwer_loss
-from htr.training.sft import sft_loss
+from htr.training.losses import mwer_loss, sft_loss
 from htr.utils.io import file_hash, read_json, read_jsonl
 
 

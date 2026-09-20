@@ -5,8 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "historical-handwriting-qwen"
 version = "0.1.0"
-description = "Reproducible Qwen2.5-VL handwriting recognition with LoRA and MWER"
+description = "Qwen2.5-VL handwriting recognition with LoRA and MWER"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
   "torch==2.14.0", "torchvision==0.29.0", "transformers==5.17.0", "peft==0.21.0",

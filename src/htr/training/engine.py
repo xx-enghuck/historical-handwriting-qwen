@@ -1,4 +1,4 @@
-"""Single-device research loop with validation-only model selection and exact epoch resume."""
+"""Training loop, validation and checkpoint resume."""
 
 import math
 import random
@@ -9,6 +9,7 @@ from htr.config import Config
 from htr.data.crop import crop_line
 from htr.data.dataset import load_image, samples_hash
 from htr.data.split import load_splits
+from htr.decoding.beam import greedy_decode
 from htr.evaluation.metrics import corpus_metrics
 from htr.models.lora import add_lora, parameter_report, set_trainable, train_mode
 from htr.models.qwen import QwenEncoder, load_qwen, to_device
@@ -18,7 +19,7 @@ from htr.training.checkpoint import (
     save_bundle,
     save_training_state,
 )
-from htr.training.sft import sft_loss
+from htr.training.losses import sft_loss
 from htr.utils.io import read_json
 from htr.utils.logging import RunLogger
 from htr.utils.seed import seed_everything
@@ -41,8 +42,6 @@ def validate(model, encoder: QwenEncoder, samples: list, cfg: Config) -> dict:
         loss = model(**batch, use_cache=False).loss
         nll += float(loss) * count
         tokens += count
-        from htr.decoding.greedy import greedy_decode
-
         predictions.append(
             greedy_decode(model, encoder, image, cfg.decode)["candidates"][0]["text"]
         )

@@ -7,10 +7,9 @@ from htr.config import Config, ModelConfig
 from htr.data.dummy import generate_dummy
 from htr.decoding.infer import infer
 from htr.evaluation.evaluate import evaluate
-from htr.testing import tiny_components
 
 
-def test_image_only_inference_and_evaluation_provenance(tmp_path):
+def test_image_only_inference_and_evaluation_provenance(tmp_path, tiny_components):
     torch.set_num_threads(1)
     cfg = Config(project_root=str(tmp_path))
     cfg.data.image_root = "dummy"
@@ -18,7 +17,7 @@ def test_image_only_inference_and_evaluation_provenance(tmp_path):
     cfg.decode.input_csv = "dummy/metadata.csv"
     cfg.decode.max_new_tokens = 2
     csv_path = generate_dummy(tmp_path / "dummy", count=2)
-    components = tiny_components()
+    components = tiny_components
     first = infer(cfg, components=components)
     metrics = evaluate(cfg, reference_csv="dummy/metadata.csv")
     assert metrics["samples"] == 2

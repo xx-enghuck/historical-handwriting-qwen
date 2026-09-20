@@ -6,7 +6,6 @@ from htr.config import LoraConfig, ModelConfig
 from htr.decoding.rescore import rescore_candidates, sequence_logprobs
 from htr.models.lora import add_lora, is_adapter, set_trainable, train_mode
 from htr.models.qwen import QwenEncoder
-from htr.testing import tiny_components
 from htr.training.losses import mwer_loss, nbest_probabilities
 
 
@@ -39,9 +38,9 @@ def test_toy_mwer_centering_and_risk_detach():
 
 
 @pytest.mark.parametrize("checkpointed", [False, True])
-def test_actual_lora_gradient_through_rescoring_not_wer(checkpointed):
+def test_actual_lora_gradient_through_rescoring_not_wer(checkpointed, tiny_components):
     torch.set_num_threads(1)
-    model, processor = tiny_components()
+    model, processor = tiny_components
     model = add_lora(model, LoraConfig(r=2, alpha=4, dropout=0))
     set_trainable(model, "mwer")
     train_mode(model, "mwer")
