@@ -12,20 +12,9 @@ license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
   "torch==2.14.0", "torchvision==0.29.0", "transformers==5.17.0", "peft==0.21.0",
-  "accelerate==1.15.0", "Pillow==12.3.0", "PyYAML==6.0.3",
+  "accelerate==1.15.0", "Pillow==12.3.0",
   "numpy==2.5.3", "safetensors==0.8.0",
 ]
 
-[project.scripts]
-htr = "htr.cli:main"
-
 [tool.setuptools.packages.find]
 where = ["src"]
-
-[tool.ruff]
-line-length = 100
-target-version = "py312"
-
-[tool.ruff.lint]
-select = ["E", "F", "I"]
-ignore = ["E501"]

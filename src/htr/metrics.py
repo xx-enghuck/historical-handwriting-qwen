@@ -1,4 +1,4 @@
-"""Exact character/word edit distances with explicit normalization."""
+"""Character and word error rates for validation, CTC alignment and MWER."""
 
 import unicodedata
 from collections.abc import Sequence

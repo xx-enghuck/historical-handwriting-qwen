@@ -13,12 +13,6 @@ from htr.config import Config
 from htr.utils.io import read_json, write_json
 
 
-def setup_logging() -> None:
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
-    )
-
-
 def environment(root: Path) -> dict:
     def git(*args: str) -> str | None:
         try:

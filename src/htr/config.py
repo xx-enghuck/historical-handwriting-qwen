@@ -1,11 +1,8 @@
-"""Strict, composable YAML configuration; paths are relative to project_root."""
+"""Model, data and training settings; paths are relative to project_root."""
 
-from collections.abc import Sequence
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
-
-import yaml
 
 
 @dataclass
@@ -123,8 +120,6 @@ class MWERConfig:
     length_normalization: float = 0.0
     center_risks: bool = True
     lambda_ce: float = 0.1
-    ablation_learning_rate: float = 1e-5
-    ablation_epochs: int = 2
 
 
 @dataclass
@@ -193,53 +188,3 @@ class Config:
             and self.train.early_stopping_patience < 1
         ):
             raise ValueError("early_stopping_patience must be positive or null")
-        if self.mwer.ablation_learning_rate <= 0 or self.mwer.ablation_epochs < 1:
-            raise ValueError("Invalid MWER ablation schedule")
-
-
-def merge(base: dict, updates: dict) -> dict:
-    result = dict(base)
-    for key, value in updates.items():
-        result[key] = merge(result.get(key, {}), value) if isinstance(value, dict) else value
-    return result
-
-
-def _read_yaml(path: Path, seen: set[Path]) -> dict:
-    path = path.resolve()
-    if path in seen:
-        raise ValueError(f"Circular config inheritance: {path}")
-    raw = yaml.safe_load(path.read_text()) or {}
-    if "project_root" in raw:
-        raw["project_root"] = str((path.parent / raw["project_root"]).resolve())
-    parent = raw.pop("extends", None)
-    return merge(_read_yaml(path.parent / parent, seen | {path}), raw) if parent else raw
-
-
-def load_config(path: str | Path, overrides: Sequence[str] = ()) -> Config:
-    """Load YAML inheritance and strict dotted key=value overrides."""
-    path = Path(path).resolve()
-    raw = _read_yaml(path, set())
-    for item in overrides:
-        key, value = item.split("=", 1)
-        keys = key.split(".")
-        node = raw
-        for part in keys[:-1]:
-            node = node.setdefault(part, {})
-        node[keys[-1]] = yaml.safe_load(value)
-    sections = {
-        "data": DataConfig,
-        "crop": CropConfig,
-        "model": ModelConfig,
-        "lora": LoraConfig,
-        "train": TrainConfig,
-        "decode": DecodeConfig,
-        "normalization": NormalizeConfig,
-        "stackmix": StackMixConfig,
-        "mwer": MWERConfig,
-    }
-    for name, cls in sections.items():
-        raw[name] = cls(**raw.get(name, {}))
-    raw["project_root"] = str((path.parent / raw.get("project_root", "..")).resolve())
-    cfg = Config(**raw)
-    cfg.validate()
-    return cfg

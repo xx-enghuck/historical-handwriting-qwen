@@ -7,7 +7,7 @@ import numpy as np
 import torch
 from PIL import Image
 
-from htr.evaluation.metrics import sample_metrics
+from htr.metrics import sample_metrics
 
 
 @dataclass(frozen=True)

@@ -1,4 +1,4 @@
-"""Image-only inference entry point, kept separate from reference-based evaluation."""
+"""Transcribe line images with the base model or trained adapters."""
 
 import time
 from pathlib import Path
@@ -16,11 +16,12 @@ from htr.utils.logging import environment
 from htr.utils.seed import seed_everything
 
 
-def infer(cfg: Config, split: str = "validation", components: tuple | None = None) -> list[dict]:
+def infer(cfg: Config, split: str = "validation") -> list[dict]:
+    cfg.validate()
     seed_everything(cfg.seed, cfg.deterministic)
     started = time.perf_counter()
     if cfg.decode.num_return_sequences != 1:
-        raise ValueError("Final inference returns one hypothesis; use generate-nbest for MWER")
+        raise ValueError("Final inference returns one hypothesis; use generate_nbest for MWER")
     if cfg.decode.input_csv:
         # Deliberately do not read the transcription column even when it exists.
         samples = read_samples(
@@ -31,9 +32,7 @@ def infer(cfg: Config, split: str = "validation", components: tuple | None = Non
         samples = load_splits(cfg)[split]
     if not samples:
         raise ValueError(f"Empty inference split: {split}")
-    if components:
-        model, processor = components
-    elif cfg.train.checkpoint:
+    if cfg.train.checkpoint:
         model, processor, _ = load_bundle(cfg, cfg.path(cfg.train.checkpoint), "inference")
     else:
         model, processor = load_qwen(cfg.model)

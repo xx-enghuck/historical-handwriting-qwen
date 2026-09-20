@@ -10,8 +10,8 @@ from htr.data.crop import crop_line
 from htr.data.dataset import load_image, samples_hash
 from htr.data.split import load_splits
 from htr.decoding.beam import greedy_decode
-from htr.evaluation.metrics import corpus_metrics
-from htr.models.lora import add_lora, parameter_report, set_trainable, train_mode
+from htr.metrics import corpus_metrics
+from htr.models.lora import add_lora, parameter_report, train_mode
 from htr.models.qwen import QwenEncoder, load_qwen, to_device
 from htr.training.checkpoint import (
     load_bundle,
@@ -60,8 +60,9 @@ def _resume_contract(cfg: Config) -> dict:
     return raw
 
 
-def train(cfg: Config, stage: str = "sft", components: tuple | None = None) -> dict:
-    """Train SFT or MWER. components is an explicit offline integration-test hook."""
+def train(cfg: Config, stage: str = "sft") -> dict:
+    """Train the LoRA adapters with SFT or MWER."""
+    cfg.validate()
     seed_everything(cfg.seed, cfg.deterministic)
     splits = load_splits(cfg)
     train_samples, validation = splits["train"], splits["validation"]
@@ -77,11 +78,6 @@ def train(cfg: Config, stage: str = "sft", components: tuple | None = None) -> d
             old["train"].pop(key)
         if old != _resume_contract(cfg) or bundle["stage"] != stage:
             raise ValueError("Resume settings differ; only epochs and resume may change")
-    elif components:
-        model, processor = components
-        model = add_lora(model, cfg.lora)
-        set_trainable(model, stage)
-        bundle = None
     elif stage == "mwer":
         if not cfg.train.checkpoint:
             raise ValueError("MWER requires train.checkpoint pointing to an SFT bundle")
